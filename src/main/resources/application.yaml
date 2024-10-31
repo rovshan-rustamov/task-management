@@ -1,0 +1,19 @@
+spring:
+  messages:
+    basename: lang/message
+    encoding: UTF-8
+  datasource:
+    url: jdbc:mysql://localhost:3306/user_task?createDatabaseIfNotExist=true
+    username: root
+    password: password
+  jpa:
+    hibernate.ddl-auto: validate
+    show-sql: true
+  security:
+    secret: c2VjcmV0IHRoYXQgSSBjYW5ub3Qgc2hhcmUgd2l0aCBhbnlvbmUgZXZlbiBPbWFyIG1heWJlIHRoYXQgY291bGQgY2hhbmdlIGluIGZ1dHVyZQ==
+security:
+  token:
+    expirationTime: 60
+
+server:
+  port: 9090
