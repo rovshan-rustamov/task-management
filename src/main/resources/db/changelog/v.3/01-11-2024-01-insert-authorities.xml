@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="01-11-2024-01" author="rovshan">
+        <insert tableName="granted_user_authority">
+            <column name="user_authority" value="SUPER_ADMIN"/>
+        </insert>
+        <insert tableName="granted_user_authority">
+            <column name="user_authority" value="ORGANIZATION_ADMIN"/>
+        </insert>
+        <insert tableName="granted_user_authority">
+            <column name="user_authority" value="USER"/>
+        </insert>
+
+    </changeSet>
+</databaseChangeLog>

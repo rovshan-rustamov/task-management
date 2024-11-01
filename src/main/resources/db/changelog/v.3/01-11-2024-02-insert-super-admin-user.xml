@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="01-11-2024-02" author="rovshan">
+        <insert tableName="user">
+            <column name="email" value="superadmin@example.com"/>
+            <column name="username" value="superadmin"/>
+<!--            can get the hashed password from commandlinerunner by hashing there-->
+            <column name="password" value="somehashedpassword"/>
+            <column name="first_name" value="Super"/>
+            <column name="last_name" value="Admin"/>
+            <column name="created_at" valueDate="2024-11-01T00:00:00"/>
+            <column name="updated_at" valueDate="2024-11-01T00:00:00"/>
+        </insert>
+
+
+        <insert tableName="user_authorities">
+            <column name="user_id" value="1" />
+            <column name="authority_id" value="1"/>
+
+        </insert>
+
+
+    </changeSet>
+</databaseChangeLog>

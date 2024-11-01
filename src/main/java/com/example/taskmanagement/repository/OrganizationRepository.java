@@ -1,4 +1,7 @@
 package com.example.taskmanagement.repository;
 
-public interface OrganizationRepository {
+import com.example.taskmanagement.model.Organization;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface OrganizationRepository extends JpaRepository<Organization, Long> {
 }

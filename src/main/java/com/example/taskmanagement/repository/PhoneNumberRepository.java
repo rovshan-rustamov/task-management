@@ -1,4 +1,7 @@
 package com.example.taskmanagement.repository;
 
-public interface PhoneNumberRepository {
+import com.example.taskmanagement.model.PhoneNumber;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface PhoneNumberRepository extends JpaRepository<PhoneNumber, Long> {
 }

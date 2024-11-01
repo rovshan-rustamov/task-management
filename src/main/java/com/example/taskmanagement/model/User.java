@@ -28,6 +28,8 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+    @NotNull
+    @Column(name = "email",unique = true)
     String email;
     @Column(name = "username", nullable = false)
     private String username;

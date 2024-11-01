@@ -12,6 +12,7 @@ import java.util.Set;
 @Setter
 @ToString
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
