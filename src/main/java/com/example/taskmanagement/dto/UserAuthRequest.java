@@ -4,9 +4,11 @@ import com.example.taskmanagement.validators.PasswordsMatch;
 import com.example.taskmanagement.validators.ValidEmail;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 @PasswordsMatch
 public class UserAuthRequest {
 

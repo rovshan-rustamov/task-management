@@ -1,13 +1,19 @@
 package com.example.taskmanagement.service.impl;
 
+import com.example.taskmanagement.dto.LoginRequest;
 import com.example.taskmanagement.dto.LoginResponse;
 import com.example.taskmanagement.dto.UserAuthRequest;
 import com.example.taskmanagement.exception.BadRequestException;
 import com.example.taskmanagement.exception.ErrorCode;
 import com.example.taskmanagement.model.*;
 import com.example.taskmanagement.repository.*;
+import com.example.taskmanagement.security.JwtService;
 import com.example.taskmanagement.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,8 +30,10 @@ public class AuthServiceImpl implements AuthService {
     private final PhoneNumberRepository phoneNumberRepository;
     private final GrantedUserAuthorityRepository grantedUserAuthorityRepository;
     private final OrganizationRepository organizationRepository;
-    private final TaskRepository taskRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
+
     @Override
     public LoginResponse registerUser(UserAuthRequest userAuthRequest) {
         Optional<User> userOptional = userRepository.findByUsername(userAuthRequest.getUsername());
@@ -60,51 +68,26 @@ public class AuthServiceImpl implements AuthService {
         phoneNumberRepository.save(phoneNumber);
 
         return LoginResponse.builder()
-                .token("sometimea")
+                .token(jwtService.issueTokenForUser(user))
                 .build();
-
 
 
     }
 
-    /*
-      GrantedUserAuthority grantedUserAuthority = grantedUserAuthorityRepository.findById(1L).get();
-        Address address = Address.builder()
-                .address("NZS")
-                .build();
-        addressRepository.save(address);
-        Organization organization = Organization.builder()
-                .organizationName("ROVSHAN CORPORATION")
-                .address(address)
-                .build();
-        organizationRepository.save(organization);
-        User user = User.builder()
-                .name("Rovshan")
-                .surname("Rustamov")
-                .username("rovshan123")
-                .email("rustamov@gmail.com")
-                .password(passwordEncoder.encode("123456789"))
-                .authorities(List.of(grantedUserAuthority))
-                .build();
-        userRepository.save(user);
-        PhoneNumber phoneNumber = PhoneNumber.builder()
-                .phoneNumber("+994-55-479-43-11")
-                .user(user)
-                .build();
-        phoneNumberRepository.save(phoneNumber);
-        Task task = Task.builder()
-                .assignedUsers(Set.of(user))
-                .deadline(LocalDateTime.now())
-                .description("some sort of description")
-                .title("Amazing title")
-                .organization(organization)
-                .status(TaskStatus.New)
-                .build();
-        taskRepository.save(task);
-     */
+    public LoginResponse loginUser(LoginRequest loginRequest) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        Optional<User> userOptional = userRepository.findByUsername(loginRequest.getUsername());
+        if (userOptional.isPresent()) {
+            return LoginResponse.builder()
+                    .token(jwtService.issueTokenForUser(userOptional.get()))
+                    .build();
+        }
 
+        throw new BadRequestException(ErrorCode.EMAIL_OR_USERNAME_WRONG);
 
-
+    }
 
 
 
