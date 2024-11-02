@@ -1,7 +1,6 @@
 package com.example.taskmanagement.dto;
 
 import com.example.taskmanagement.validators.PasswordsMatch;
-import com.example.taskmanagement.validators.ValidEmail;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import lombok.Builder;

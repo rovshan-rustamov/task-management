@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
@@ -28,6 +29,7 @@ public class BaseSecurityConfig {
     private final UserRepository repository;
     private final TokenAuthService tokenAuthService;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final AuthRequestFilter authRequestFilter;
 
 
     @Bean
@@ -36,18 +38,11 @@ public class BaseSecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
         http.cors(AbstractHttpConfigurer::disable);
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
+        http.addFilterBefore(authRequestFilter, UsernamePasswordAuthenticationFilter.class);
+        http.authenticationProvider(authenticationProvider());
 
         http.authorizeHttpRequests(auth -> auth.requestMatchers(GET, "/api/auth/**").permitAll());
-//        http.authorizeHttpRequests(auth -> auth.requestMatchers(GET, "/admin/test-admin").hasAuthority("ADMIN"));
 
-
-        http.authorizeHttpRequests(auth -> auth.anyRequest().authenticated());
-
-
-        http.httpBasic(withDefaults());
-
-        http.apply(new AuthFilterConfigurerAdapter(tokenAuthService));
         http.exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint);
         return http.build();
     }
