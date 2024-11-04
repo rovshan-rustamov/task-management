@@ -2,11 +2,15 @@ package com.example.taskmanagement.model;
 
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "granted_user_authority")
-public class GrantedUserAuthority implements GrantedAuthority {
+public class GrantedUserAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,8 +19,5 @@ public class GrantedUserAuthority implements GrantedAuthority {
     @Enumerated(EnumType.STRING)
     private UserAuthority userAuthority;
 
-    @Override
-    public String getAuthority() {
-        return userAuthority.toString();
-    }
+
 }

@@ -3,6 +3,7 @@ package com.example.taskmanagement.exception;
 import com.example.taskmanagement.service.TranslationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -30,6 +31,19 @@ public class GlobalExceptionHandler {
                            .details(translationService.findByKey(ex.getErrorCode().name(), lang, ex.getArguments()))
                    .build());
     }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleUsernameNotFoundException(UsernameNotFoundException ex, WebRequest req) {
+        String lang = req.getHeader(ACCEPT_LANGUAGE) == null ? "en" : req.getHeader(ACCEPT_LANGUAGE);
+        ex.printStackTrace();
+
+        return ResponseEntity.status(404).body(ErrorResponse.builder()
+                .status(404)
+                .title("User Not Found")
+                .details(translationService.findByKey("username.not.found", lang, ex.getMessage()))
+                .build());
+    }
+
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex,

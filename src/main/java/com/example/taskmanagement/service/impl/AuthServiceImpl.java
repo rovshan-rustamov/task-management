@@ -8,6 +8,7 @@ import com.example.taskmanagement.exception.ErrorCode;
 import com.example.taskmanagement.model.*;
 import com.example.taskmanagement.repository.*;
 import com.example.taskmanagement.security.JwtService;
+import com.example.taskmanagement.security.UserDetailsImpl;
 import com.example.taskmanagement.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,6 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,7 +32,7 @@ public class AuthServiceImpl implements AuthService {
     private final PhoneNumberRepository phoneNumberRepository;
     private final GrantedUserAuthorityRepository grantedUserAuthorityRepository;
     private final OrganizationRepository organizationRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
@@ -68,7 +70,7 @@ public class AuthServiceImpl implements AuthService {
         phoneNumberRepository.save(phoneNumber);
 
         return LoginResponse.builder()
-                .token(jwtService.issueTokenForUser(user))
+                .token(jwtService.generateToken(new UserDetailsImpl(user)))
                 .build();
 
 
@@ -81,7 +83,7 @@ public class AuthServiceImpl implements AuthService {
         Optional<User> userOptional = userRepository.findByUsername(loginRequest.getUsername());
         if (userOptional.isPresent()) {
             return LoginResponse.builder()
-                    .token(jwtService.issueTokenForUser(userOptional.get()))
+                    .token("jwtService.issueTokenForUser(userOptional.get())")
                     .build();
         }
 
